@@ -1,0 +1,40 @@
+.subNav {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.subNav span {
+  font-weight: bold;
+  color: #333;
+}
+
+.filterButton {
+  background: none;
+  border: 1px solid #e0e0e0;
+  padding: 5px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  color: #333;
+}
+
+.filterButton.active {
+  background-color: #c62828;
+  color: white;
+  border-color: #c62828;
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* You might want to adjust these styles based on your layout */
+.cartIcon {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
