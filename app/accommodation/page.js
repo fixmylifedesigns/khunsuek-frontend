@@ -164,7 +164,7 @@ export default function Accommodation() {
       );
     } else {
       const simplifiedHotel = {
-        id: "prod_QrnpP0gJff2Onl",
+        id: "prod_QroWc4p6pGe5Na",
         name: hotel.hotel_name,
         price: hotel.min_total_price,
         currency: toLowercase(hotel.currencycode),
@@ -176,6 +176,7 @@ export default function Accommodation() {
         checkOut: currentCheckOut,
         adults: currentAdults,
       };
+      console.log(process.env.STRIPE_HOTEL_TEST_ID)
       updatedCart = [...currentCart, simplifiedHotel];
     }
 
