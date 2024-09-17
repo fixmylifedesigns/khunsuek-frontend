@@ -15,9 +15,21 @@ const ProductCard = ({
 }) => {
   if (loading) {
     return (
-      <div className={`${styles.card} ${styles.skeleton}`}>
-        {/* ... (keep existing skeleton loader content) */}
+      <div className={`${styles.cardContainer} ${styles.card} ${styles.skeleton}`}>
+      <div className={`${styles.cardImage} ${styles.skeletonImage}`}></div>
+      <div className={styles.cardContent}>
+        <div className={styles.cardInfo}>
+          <div className={`${styles.skeletonText} ${styles.skeletonTitle}`}></div>
+          <div className={`${styles.skeletonText} ${styles.skeletonDescription}`}></div>
+        </div>
+        <div className={styles.cardFooter}>
+          <div className={styles.priceSection}>
+            <div className={`${styles.skeletonText} ${styles.skeletonPrice}`}></div>
+          </div>
+          <div className={`${styles.button} ${styles.skeletonButton}`}></div>
+        </div>
       </div>
+    </div>
     );
   }
 

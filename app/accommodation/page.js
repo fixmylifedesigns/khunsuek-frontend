@@ -223,7 +223,6 @@ export default function Accommodation() {
 
       {loading && <p>Searching for hotels...</p>}
       {error && <p className={styles.error}>{error}</p>}
-
       <div className={styles.hotelGrid}>
         {loading ? (
           Array(6)
