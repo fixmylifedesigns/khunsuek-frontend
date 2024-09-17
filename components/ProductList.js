@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 import ProductCard from "./reusableComponents/ProductCard";
 import styles from "../styles/ProductList.module.css";
 
-export default function ProductList() {
+// ProductList component with new productType prop for filtering
+export default function ProductList({ productType }) {
+  // State variables
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,10 +14,9 @@ export default function ProductList() {
   const [filters, setFilters] = useState(["All"]);
   const [activeFilter, setActiveFilter] = useState("All");
   const [cart, setCart] = useState([]);
-
-  // Add this line to define the addedToCart state
   const [addedToCart, setAddedToCart] = useState(null);
 
+  // Fetch products and initialize filters
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -24,21 +25,30 @@ export default function ProductList() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        const productsWithMetadata = data.filter(
-          (product) => product.price && product.image
-        );
-        setProducts(productsWithMetadata);
-        setFilteredProducts(productsWithMetadata);
 
-        const metadataFields = new Set(["All"]);
-        productsWithMetadata.forEach((product) => {
-          if (product.metadata) {
-            Object.keys(product.metadata).forEach((key) =>
-              metadataFields.add(key)
-            );
+        // Filter products based on productType prop
+        const typeFilteredProducts = data.filter(
+          (product) =>
+            product.price &&
+            product.image &&
+            product.metadata &&
+            product.metadata.product_type &&
+            product.metadata.product_type.includes(productType)
+        );
+
+        setProducts(typeFilteredProducts);
+        setFilteredProducts(typeFilteredProducts);
+
+        // Extract unique filter values from the 'filter' metadata
+        const filterSet = new Set(["All"]);
+        typeFilteredProducts.forEach((product) => {
+          if (product.metadata && product.metadata.filter) {
+            product.metadata.filter
+              .split(",")
+              .forEach((filter) => filterSet.add(filter.trim()));
           }
         });
-        setFilters(Array.from(metadataFields));
+        setFilters(Array.from(filterSet));
       } catch (err) {
         console.error("Error fetching products:", err);
         setError(err.message);
@@ -46,25 +56,34 @@ export default function ProductList() {
         setLoading(false);
       }
     };
+
     // Load cart from local storage
     const savedCart = JSON.parse(localStorage.getItem("cart") || "[]");
-
     setCart(savedCart);
-    fetchProducts();
-  }, []);
 
+    fetchProducts();
+  }, [productType]);
+
+  // Handle filter click
   const handleFilterClick = (filter) => {
     setActiveFilter(filter);
     if (filter === "All") {
       setFilteredProducts(products);
     } else {
       const filtered = products.filter(
-        (product) => product.metadata && product.metadata.hasOwnProperty(filter)
+        (product) =>
+          product.metadata &&
+          product.metadata.filter &&
+          product.metadata.filter
+            .split(",")
+            .map((f) => f.trim())
+            .includes(filter)
       );
       setFilteredProducts(filtered);
     }
   };
 
+  // Handle add to cart
   const handleAddToCart = (product) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item.id === product.id);
@@ -87,37 +106,38 @@ export default function ProductList() {
     });
   };
 
+  // Render component
   return (
     <div>
+      {/* Sub-navigation for filters */}
       <div className={styles.subNav}>
-        <span>{loading ? "0" : filteredProducts.length} Classes</span>
-        <button
-          onClick={() => handleFilterClick("All")}
-          className={`${styles.filterButton} ${
-            activeFilter === "All" ? styles.active : ""
-          }`}
-        >
-          All ({loading ? "0" : products.length})
-        </button>
-        {!loading &&
-          filters.slice(1).map((filter) => (
-            <button
-              key={filter}
-              onClick={() => handleFilterClick(filter)}
-              className={`${styles.filterButton} ${
-                activeFilter === filter ? styles.active : ""
-              }`}
-            >
-              {filter.charAt(0).toUpperCase() + filter.slice(1)} (
-              {
-                products.filter(
-                  (p) => p.metadata && p.metadata.hasOwnProperty(filter)
-                ).length
-              }
-              )
-            </button>
-          ))}
+        <span>{loading ? "0" : filteredProducts.length} Items</span>
+        {filters.map((filter) => (
+          <button
+            key={filter}
+            onClick={() => handleFilterClick(filter)}
+            className={`${styles.filterButton} ${
+              activeFilter === filter ? styles.active : ""
+            }`}
+          >
+            {filter} (
+            {filter === "All"
+              ? products.length
+              : products.filter(
+                  (p) =>
+                    p.metadata &&
+                    p.metadata.filter &&
+                    p.metadata.filter
+                      .split(",")
+                      .map((f) => f.trim())
+                      .includes(filter)
+                ).length}
+            )
+          </button>
+        ))}
       </div>
+
+      {/* Product grid */}
       <div className={styles.productGrid}>
         {loading ? (
           // Render skeleton loaders while loading

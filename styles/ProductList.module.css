@@ -1,3 +1,4 @@
+/* Existing styles */
 .subNav {
   display: flex;
   gap: 10px;
@@ -31,10 +32,116 @@
   gap: 20px;
 }
 
-/* You might want to adjust these styles based on your layout */
-.cartIcon {
+/* Updated styles for responsive layout */
+@media (max-width: 768px) {
+  .subNav {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .filterButton {
+    margin-bottom: 10px;
+  }
+
+  .productGrid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+.mobileMenuOverlay {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.9);
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
+}
+
+.mobileMenuOverlay ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mobileMenuOverlay li {
+  margin: 20px 0;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.mobileMenuOverlay a,
+.mobileMenuOverlay button {
+  color: white !important; /* Ensure text is always white in mobile menu */
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.mobileMenuOverlay a:hover,
+.mobileMenuOverlay button:hover {
+  color: #c62828 !important; /* Red color on hover */
+}
+
+/* Hamburger menu button styles */
+.hamburgerButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 1001;
+}
+
+/* Adjust cart icon for mobile */
+@media (max-width: 768px) {
+  .cartIcon {
+    top: 10px;
+    right: 60px; /* Adjust this value to prevent overlap with the hamburger menu */
+  }
+}
+
+/* Animation for menu items */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobileMenuOverlay li {
+  animation: fadeInUp 0.3s ease-out forwards;
+  opacity: 0;
+}
+
+.mobileMenuOverlay li:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.mobileMenuOverlay li:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.mobileMenuOverlay li:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.mobileMenuOverlay li:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.mobileMenuOverlay li:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.mobileMenuOverlay li:nth-child(6) {
+  animation-delay: 0.6s;
+}
+.mobileMenuOverlay li:nth-child(7) {
+  animation-delay: 0.7s;
+}
+.mobileMenuOverlay li:nth-child(8) {
+  animation-delay: 0.8s;
 }

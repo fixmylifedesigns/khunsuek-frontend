@@ -234,7 +234,7 @@ export default function Accommodation() {
               key={hotel.hotel_id}
               image={getLargerImageUrl(hotel.main_photo_url)}
               title={hotel.hotel_name}
-              description={`${hotel.city}, ${hotel.country_trans}`}
+              description={`${hotel.city}, ${hotel.hotel_name_trans}`}
               price={hotel.min_total_price}
               currency={hotel.currencycode}
               buttonText="Add to Cart"

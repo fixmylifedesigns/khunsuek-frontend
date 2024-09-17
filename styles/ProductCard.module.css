@@ -11,7 +11,7 @@
   --button-background-color: #4caf50;
   --button-hover-background-color: #45a049;
   --skeleton-background-color: #e0e0e0;
-  --card-height: 450px; /* Set a fixed height for all cards */
+  --card-height: 450px;
 }
 
 .card {
@@ -103,7 +103,7 @@
   display: block;
   width: 100%;
   padding: 10px;
-  background-color: #4caf50;
+  background-color: var(--button-background-color);
   color: white;
   border: none;
   border-radius: 4px;
@@ -113,11 +113,11 @@
 }
 
 .button:hover {
-  background-color: #45a049;
+  background-color: var(--button-hover-background-color);
 }
 
 .button.addedToCart {
-  background-color: #45a049;
+  background-color: var(--button-hover-background-color);
   transform: scale(1.05);
   animation: pulse 1s;
 }

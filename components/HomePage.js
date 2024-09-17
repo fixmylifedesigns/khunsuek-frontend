@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import Image from "next/image";
 import banner from "../public/KSM-HOME-Hotspot.jpg";
 
@@ -14,6 +15,7 @@ const HomePage = () => {
           layout="fill"
           objectFit="cover"
           className="brightness-50"
+          loading="lazy"
         />
         <div className="absolute inset-0 flex flex-col justify-center items-center text-white">
           <h1 className="text-5xl font-bold mb-4">
@@ -23,7 +25,7 @@ const HomePage = () => {
             Experience authentic Muay Thai training in the heart of Thailand
           </p>
           <button className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-            Book a Class
+            <Link href="/courses">Book a Class</Link>
           </button>
         </div>
       </div>

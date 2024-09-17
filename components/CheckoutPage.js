@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { loadStripe } from "@stripe/stripe-js";
 import styles from "../styles/Checkout.module.css";
 
@@ -87,10 +88,13 @@ const CheckoutPage = () => {
           <ul className={styles.cartList}>
             {cart.map((item) => (
               <li key={item.id} className={styles.cartItem}>
-                <img
+                <Image
                   src={item.image}
                   alt={item.name}
                   className={styles.productImage}
+                  loading="lazy"
+                  width={100}
+                  height={100}
                 />
                 <div className={styles.productInfo}>
                   <h3>{item.name}</h3>

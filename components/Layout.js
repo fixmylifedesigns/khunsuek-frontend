@@ -4,7 +4,15 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../public/KSM_LOGO_header.png";
-import { Instagram, MapPin, Phone, ShoppingCart, User } from "lucide-react";
+import {
+  Instagram,
+  MapPin,
+  Phone,
+  ShoppingCart,
+  User,
+  Menu,
+  X,
+} from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import LoginModal from "./LoginModal";
 
@@ -12,6 +20,7 @@ import LoginModal from "./LoginModal";
 const Layout = ({ children }) => {
   const [cartItemCount, setCartItemCount] = useState(0);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const auth = useAuth();
   const user = auth?.user;
   const login = auth?.login;
@@ -37,6 +46,108 @@ const Layout = ({ children }) => {
       setIsLoginModalOpen(true);
     }
   };
+
+  // Function to toggle mobile menu
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+    // Prevent scrolling when menu is open
+    document.body.style.overflow = isMobileMenuOpen ? "auto" : "hidden";
+  };
+
+  // Navigation links component
+  const NavLinks = ({ mobile = false, onItemClick = () => {} }) => (
+    <ul
+      className={`flex ${
+        mobile ? "flex-col items-center space-y-6" : "space-x-6"
+      }`}
+    >
+      <li>
+        <Link
+          href="/"
+          className={`hover:text-red-500 ${mobile ? "text-white" : ""}`}
+          onClick={onItemClick}
+        >
+          HOME
+        </Link>
+      </li>
+      <li>
+        <Link
+          href="/courses"
+          className={`hover:text-red-500 ${mobile ? "text-white" : ""}`}
+          onClick={onItemClick}
+        >
+          COURSE
+        </Link>
+      </li>
+      <li>
+        <Link
+          href="/store"
+          className={`hover:text-red-500 ${mobile ? "text-white" : ""}`}
+          onClick={onItemClick}
+        >
+          STORE
+        </Link>
+      </li>
+      <li>
+        <Link
+          href="/accommodation"
+          className={`hover:text-red-500 ${mobile ? "text-white" : ""}`}
+          onClick={onItemClick}
+        >
+          ACCOMMODATION
+        </Link>
+      </li>
+      <li>
+        <Link
+          href="/facilities"
+          className={`hover:text-red-500 ${mobile ? "text-white" : ""}`}
+          onClick={onItemClick}
+        >
+          FACILITIES
+        </Link>
+      </li>
+      <li>
+        <Link
+          href="/our-team"
+          className={`hover:text-red-500 ${mobile ? "text-white" : ""}`}
+          onClick={onItemClick}
+        >
+          OUR TEAM
+        </Link>
+      </li>
+      <li>
+        <Link
+          href="/checkout"
+          className={`hover:text-red-500 relative ${
+            mobile ? "text-white" : ""
+          }`}
+          onClick={onItemClick}
+        >
+          <ShoppingCart size={24} />
+          {cartItemCount > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+              {cartItemCount}
+            </span>
+          )}
+        </Link>
+      </li>
+      <li>
+        <button
+          onClick={() => {
+            handleAuthClick();
+            onItemClick();
+          }}
+          className={`flex items-center hover:text-red-500 ${
+            mobile ? "text-white" : ""
+          }`}
+        >
+          <User size={24} className="mr-2" />
+          {user ? "Logout" : "Login"}
+        </button>
+      </li>
+    </ul>
+  );
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Top bar with contact information */}
@@ -71,67 +182,37 @@ const Layout = ({ children }) => {
             <Image
               src={logo}
               alt="Muay Thai training"
-              style={{ width: "100px" }}
-              //   layout="fill"
-              //   objectFit="cover"
+              width="100"
               sizes="50%"
+              loading="lazy"
             />
           </Link>
 
-          {/* Navigation links */}
-          <ul className="flex space-x-6">
-            <li>
-              <Link href="/" className="hover:text-red-500">
-                HOME
-              </Link>
-            </li>
-            <li>
-              <Link href="/courses" className="hover:text-red-500">
-                COURSE
-              </Link>
-            </li>
-            <li>
-              <Link href="/store" className="hover:text-red-500">
-                STORE
-              </Link>
-            </li>
-            <li>
-              <Link href="/accommodation" className="hover:text-red-500">
-                ACCOMMODATION
-              </Link>
-            </li>
-            <li>
-              <Link href="/facilities" className="hover:text-red-500">
-                FACILITIES
-              </Link>
-            </li>
-            <li>
-              <Link href="/our-team" className="hover:text-red-500">
-                OUR TEAM
-              </Link>
-            </li>
-            <li>
-              <Link href="/checkout" className="hover:text-red-500 relative">
-                <ShoppingCart size={24} />
-                {cartItemCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                    {cartItemCount}
-                  </span>
-                )}
-              </Link>
-            </li>
-            <li>
-              <button
-                onClick={handleAuthClick}
-                className="flex items-center hover:text-red-500"
-              >
-                <User size={24} className="mr-2" />
-                {user ? "Logout" : "Login"}
-              </button>
-            </li>
-          </ul>
+          {/* Desktop Navigation */}
+          <div className="hidden md:block">
+            <NavLinks />
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-white focus:outline-none z-50"
+            onClick={toggleMobileMenu}
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
       </nav>
+
+      {/* Mobile Navigation Overlay */}
+      <div
+        className={`fixed inset-0 bg-black bg-opacity-90 z-40 transition-opacity duration-300 ease-in-out ${
+          isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
+      >
+        <div className="flex items-center justify-center h-full">
+          <NavLinks mobile onItemClick={toggleMobileMenu} />
+        </div>
+      </div>
 
       {/* Main content */}
       <main className="flex-grow">{children}</main>
@@ -139,7 +220,14 @@ const Layout = ({ children }) => {
       {/* Footer */}
       <footer className="bg-black text-white py-6">
         <div className="container mx-auto text-center">
-          <p>&copy; 2023 KHUNSUEK Muay Thai Gym. All rights reserved.</p>
+          <p>
+            &copy; 2024 Irving Duran. All rights reserved. This is a sample
+            website for demonstration purposes only. Unauthorized use,
+            reproduction, or distribution of this content is strictly
+            prohibited.
+          </p>
+
+          {/* <p>&copy; 2023 KHUNSUEK Muay Thai Gym. All rights reserved.</p> */}
         </div>
       </footer>
       <LoginModal
