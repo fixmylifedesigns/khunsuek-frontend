@@ -65,7 +65,7 @@ export default function SuccessPage({ searchParams }) {
       <div id="contact-info" className="bg-white shadow-md rounded-lg p-6 mb-6">
         <h2 className="text-2xl font-semibold mb-4">Need Help?</h2>
         <p>
-          If you have any questions or concerns, please don't hesitate to
+          If you have any questions or concerns, please don&apos;t hesitate to
           contact us:
         </p>
         <p className="mt-2">
