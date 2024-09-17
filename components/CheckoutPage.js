@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { loadStripe } from "@stripe/stripe-js";
+import { CircleX } from "lucide-react";
 import styles from "../styles/Checkout.module.css";
 
 const stripePromise = loadStripe(
@@ -97,26 +98,47 @@ const CheckoutPage = () => {
                   height={100}
                 />
                 <div className={styles.productInfo}>
-                  <h3>{item.name}</h3>
+                  <h3>
+                    {item.type === "hotel" && `Hotel Booking : ${item.name}`}
+                  </h3>
                   <p>
                     {item.price.toLocaleString("en-US", {
                       style: "currency",
                       currency: item.currency,
                     })}
+                    {item.type === "hotel" && " per night"}
                   </p>
-                  {item.type === "hotel" && <p>Hotel Booking</p>}
+
+                  {item.type === "hotel" && <p>Check in {item.checkIn}</p>}
+                  {item.type === "hotel" && <p>Check in {item.checkOut}</p>}
                 </div>
                 <div className={styles.quantityControl}>
-                  <button
-                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                  >
-                    -
-                  </button>
+                  {item.type === "hotel" && <p>Number of Nights: </p>}
+                  {item.type !== "hotel" && (
+                    <button
+                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                    >
+                      -
+                    </button>
+                  )}
                   <span>{item.quantity}</span>
+                  {item.type !== "hotel" && (
+                    <button
+                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                    >
+                      +
+                    </button>
+                  )}
                   <button
-                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                    style={{ background: "none" }}
+                    onClick={() =>
+                      updateQuantity(item.id, 0)
+                    }
                   >
-                    +
+                    <CircleX
+                      size={20}
+                      style={{ marginLeft: "5px", color: "red" }}
+                    />
                   </button>
                 </div>
               </li>

@@ -164,12 +164,12 @@ export default function Accommodation() {
       );
     } else {
       const simplifiedHotel = {
-        id: hotel.hotel_id,
+        id: "prod_QrnpP0gJff2Onl",
         name: hotel.hotel_name,
         price: hotel.min_total_price,
         currency: toLowercase(hotel.currencycode),
         image: getLargerImageUrl(hotel.main_photo_url),
-        quantity: 1,
+        quantity: calculateNights(checkIn, checkOut),
         type: "hotel",
         nights: currentNights,
         checkIn: currentCheckIn,
